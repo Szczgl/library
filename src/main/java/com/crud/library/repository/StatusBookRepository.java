@@ -5,9 +5,12 @@ import com.crud.library.domain.StatusBook;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.*;
 
 @Transactional
 @Repository
 public interface StatusBookRepository extends CrudRepository<StatusBook, Long> {
-    int countByBookIdAndStatus(Long bookId, Status status);
+    //int countByBookIdAndStatus(Long bookId, Status status);
+
+    List<StatusBook> findAll();
 }

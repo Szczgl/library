@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,65 +27,23 @@ public class DbService {
     @Autowired
     private UserRepository userRepository;
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
+    public List<User> getAllUser() {
+        return userRepository.findAll();
     }
 
-    public Book saveBook (Book book) {
-        return bookRepository.save(book);
+    public List<Book> getAllBook() {
+        return bookRepository.findAll();
     }
 
-    public StatusBook addCopy(Long bookId) {
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new IllegalArgumentException("Brak takiej pozycji"));
-
-        StatusBook statusBook = new StatusBook();
-        statusBook.setBook(book);
-        statusBook.setStatus(Status.AVAILABLE);
-        return statusBookRepository.save(statusBook);
+    public List<StatusBook> getAllStatusBook() {
+        return statusBookRepository.findAll();
     }
 
-    public StatusBook changeCopyStatus(Long copyId, Status status) {
-        StatusBook statusBook = statusBookRepository.findById(copyId)
-                .orElseThrow(() -> new IllegalArgumentException("Brak takiej pozycji"));
-
-        statusBook.setStatus(status);
-        return statusBookRepository.save(statusBook);
+    public List<Borrow> getAllBorrow() {
+        return borrowRepository.findAll();
     }
 
-    public int getAvailableCopiesCount(Long bookId) {
-        return statusBookRepository.countByBookIdAndStatus(bookId, Status.AVAILABLE);
-    }
-
-    public Borrow borrowBook(Long copyId, Long userId) {
-        StatusBook statusBook = statusBookRepository.findById(copyId)
-                .orElseThrow(() -> new IllegalArgumentException("Brak takiej pozycji"));
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Brak takiej pozycji"));
-
-        if (statusBook.getStatus() != Status.AVAILABLE) {
-            throw new IllegalStateException("Brak dostępności tej książki");
-        }
-
-        statusBook.setStatus(Status.LOST);
-
-        Borrow borrow = new Borrow();
-        borrow.setStatusBook(statusBook);
-        borrow.setUser(user);
-        borrow.setBorrowed(new Date());
-
-        return borrowRepository.save(borrow);
-    }
-
-    public Borrow returnBook(Long borrowId) {
-        Borrow borrow = borrowRepository.findById(borrowId)
-                .orElseThrow(() -> new IllegalArgumentException("Nie wypożyczono takej książki"));
-
-        StatusBook statusBook = borrow.getStatusBook();
-        statusBook.setStatus(Status.AVAILABLE);
-        statusBookRepository.save(statusBook);
-
-        borrow.setReturned(new Date());
-        return borrowRepository.save(borrow);
+    public StatusBook getStatus(final Long idBook) {
+        return statusBookRepository.findById(idBook).orElseThrow();
     }
 }

@@ -17,11 +17,11 @@ public class StatusBook {
     @Column(name = "ID", unique = true)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOOK_ID")
     private Book book;
 
-    @Enumerated
-    @Column(name = "STATUS")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "STATUS",columnDefinition = "ENUM('AVAILABLE', 'LOST', 'DESTROYED')")
     private Status status;
 }

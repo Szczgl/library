@@ -28,10 +28,11 @@ public class Book {
     @Column(name = "PUBLICATION_YEAR")
     private int year;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<StatusBook> statusBooks = new ArrayList<>();
 
-    public Book(String title, String author, int year) {
+    public Book(Long id, String title, String author, int year) {
+        this.id = id;
         this.title = title;
         this.author = author;
         this.year = year;

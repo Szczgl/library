@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1/library")
@@ -21,45 +23,38 @@ public class LibraryController {
     private final DbService dbService;
     private final LibraryMapper libraryMapper;
 
-    @PostMapping("/users")
-    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) {
-        User savedUser = dbService.saveUser(libraryMapper.mapToUser(userDto));
-        return ResponseEntity.ok(libraryMapper.mapToUserDto(savedUser));
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDto>> getUser() {
+        List<User> users = dbService.getAllUser();
+        return ResponseEntity.ok(libraryMapper.mapToUserDtoList(users));
     }
 
-    @PostMapping("/books")
-    public ResponseEntity<BookDto> addBook(@RequestBody BookDto bookDto) {
-        Book savedBook = dbService.saveBook(libraryMapper.mapToBook(bookDto));
-        return ResponseEntity.ok(libraryMapper.mapToBookDto(savedBook));
+    @GetMapping("/books")
+    public ResponseEntity<List<BookDto>> getBook() {
+        List<Book> books = dbService.getAllBook();
+        return ResponseEntity.ok(libraryMapper.mapToBookDtoList(books));
     }
 
-    @PostMapping("/copies")
-    public ResponseEntity<StatusBookDto> addCopy(@RequestParam Long bookId) {
-        StatusBook statusBook = dbService.addCopy(bookId);
-        return ResponseEntity.ok(libraryMapper.mapToStatusBookDto(statusBook));
+    @GetMapping("{id}")
+    public ResponseEntity<StatusBookDto> getStatus(@PathVariable Long id) {
+        return ResponseEntity.ok(libraryMapper.mapToStatusBookDto(dbService.getStatus(id)));
     }
+//  @GetMapping("{status/idBook}")
+//    public ResponseEntity<List<StatusBookDto>> getAllStatusBooks(@PathVariable Long idBook) {
+//        List<StatusBook> statusBooks = dbService.getAllStatusBook();
+//        List<StatusBookDto> statusBookDtos = libraryMapper.mapToStatusBookDtoList(statusBooks);
+//        return ResponseEntity.ok(statusBookDtos);
+//    }
+// @GetMapping("{status}")
+//    public ResponseEntity<List<StatusBookDto>> getStatus() {
+//        List<StatusBook> statusBooks = dbService.getAllStatusBook();
+//        return ResponseEntity.ok(libraryMapper.mapToStatusBookDtoList(statusBooks));
+//    }
 
-    @PutMapping("/copies/{copyId}")
-    public ResponseEntity<StatusBookDto> changeCopyStatus(@PathVariable Long copyId, @RequestParam Status status) {
-        StatusBook updatedStatusBook = dbService.changeCopyStatus(copyId, status);
-        return ResponseEntity.ok(libraryMapper.mapToStatusBookDto(updatedStatusBook));
-    }
-
-    @GetMapping("/copies/{bookId}/available")
-    public ResponseEntity<Integer> getAvailableCopiesCount(@PathVariable Long bookId) {
-        int count = dbService.getAvailableCopiesCount(bookId);
-        return ResponseEntity.ok(count);
-    }
-
-    @PostMapping("/borrow")
-    public ResponseEntity<BorrowDto> borrowBook(@RequestParam Long copyId, @RequestParam Long userId) {
-        Borrow borrowedBook = dbService.borrowBook(copyId, userId);
-        return ResponseEntity.ok(libraryMapper.mapToBorrowDto(borrowedBook));
-    }
-
-    @PutMapping("/return/{borrowId}")
-    public ResponseEntity<BorrowDto> returnBook(@PathVariable Long borrowId) {
-        Borrow returnedBook = dbService.returnBook(borrowId);
-        return ResponseEntity.ok(libraryMapper.mapToBorrowDto(returnedBook));
-    }
+//    @GetMapping("/borrows")
+//    public ResponseEntity<List<BorrowDto>> getAllBorrows() {
+//        List<Borrow> borrows = dbService.getAllBorrow();
+//        List<BorrowDto> borrowDtos = libraryMapper.mapToBorrowDtoList(borrows);
+//        return ResponseEntity.ok(borrowDtos);
+//    }
 }
