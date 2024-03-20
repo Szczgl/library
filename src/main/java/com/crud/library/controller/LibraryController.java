@@ -9,6 +9,7 @@ import com.crud.library.domain.dto.UserDto;
 import com.crud.library.mapper.LibraryMapper;
 import com.crud.library.service.DbService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,49 @@ public class LibraryController {
     public ResponseEntity<StatusBookDto> getStatus(@PathVariable Long id) {
         return ResponseEntity.ok(libraryMapper.mapToStatusBookDto(dbService.getStatus(id)));
     }
+
+    @DeleteMapping(value = "/users/{userId}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+        dbService.deleteUser(userId);
+        return ResponseEntity.ok().build();
+    }
+    @DeleteMapping(value = "/books/{bookId}")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
+        dbService.deleteUser(bookId);
+        return ResponseEntity.ok().build();
+    }
+
+//    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Void> createUser(@RequestBody UserDto userDto) {
+//        User user = libraryMapper.mapToUser(userDto);
+//        dbService.saveUser(user);
+//        return ResponseEntity.ok().build();
+//    }
+//
+//    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Void> createBook(@RequestBody BookDto bookDto) {
+//        Book book = libraryMapper.mapToBook(bookDto);
+//        dbService.saveBook(book);
+//        return ResponseEntity.ok().build();
+//    }
+
+//    @PutMapping
+//    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
+//        User user = libraryMapper.mapToUser(userDto);
+//        User savedUser = dbService.saveUser(user);
+//        return ResponseEntity.ok(libraryMapper.mapToUserDto(savedUser));
+//    }
+//
+//    @PutMapping
+//    public ResponseEntity<BookDto> updateBook(@RequestBody BookDto bookDto) {
+//        Book book = libraryMapper.mapToBook(bookDto);
+//        Book savedBook = dbService.saveBook(book);
+//        return ResponseEntity.ok(libraryMapper.mapToBookDto(savedBook));
+//    }
+
+
+
+
 //  @GetMapping("{status/idBook}")
 //    public ResponseEntity<List<StatusBookDto>> getAllStatusBooks(@PathVariable Long idBook) {
 //        List<StatusBook> statusBooks = dbService.getAllStatusBook();

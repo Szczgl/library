@@ -12,5 +12,9 @@ import java.util.*;
 public interface StatusBookRepository extends CrudRepository<StatusBook, Long> {
     //int countByBookIdAndStatus(Long bookId, Status status);
 
+    @Override
     List<StatusBook> findAll();
+
+    @Override
+    Optional<StatusBook> findById(Long bookId);
 }

@@ -46,4 +46,20 @@ public class DbService {
     public StatusBook getStatus(final Long idBook) {
         return statusBookRepository.findById(idBook).orElseThrow();
     }
+
+    public User saveUser(final User user) {
+        return userRepository.save(user);
+    }
+
+    public Book saveBook(final Book book) {
+        return bookRepository.save(book);
+    }
+
+    public void deleteUser(final Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+    public void deleteBook(final Long bookId) {
+        bookRepository.deleteById(bookId);
+    }
 }

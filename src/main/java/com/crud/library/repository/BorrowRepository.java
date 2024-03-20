@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface BorrowRepository extends CrudRepository<Borrow, Long> {
 
+    @Override
     List<Borrow> findAll();
 }
