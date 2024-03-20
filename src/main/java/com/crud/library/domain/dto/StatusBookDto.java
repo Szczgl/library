@@ -11,6 +11,6 @@ import lombok.*;
 public class StatusBookDto {
 
     private Long id;
-    private Book idBook;
+    private Long idBook;
     private Status status;
 }
